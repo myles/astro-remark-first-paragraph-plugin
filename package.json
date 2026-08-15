@@ -1,5 +1,5 @@
 {
-  "name": "@myles/astro-remark-first-paragraph-plugin",
+  "name": "@mylesb/astro-remark-first-paragraph-plugin",
   "version": "0.0.0-development",
   "description": "Plugin for Remark to get the first paragraph of a markdown file.",
   "keywords": [
