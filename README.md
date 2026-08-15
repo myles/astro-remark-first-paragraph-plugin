@@ -1,4 +1,4 @@
-# @myles/astro-remark-first-paragraph-plugin
+# @mylesb/astro-remark-first-paragraph-plugin
 
 A [remark][remark] plugin for [Astro][astro] that copies the text of a markdown
 file's first paragraph into its frontmatter as `firstParagraph`.
@@ -9,7 +9,7 @@ write one by hand for every file.
 ## Install
 
 ```sh
-npm install @myles/astro-remark-first-paragraph-plugin
+npm install @mylesb/astro-remark-first-paragraph-plugin
 ```
 
 ## Usage
@@ -19,7 +19,7 @@ Add the plugin to the `markdown.remarkPlugins` array in your Astro config:
 ```js
 // astro.config.mjs
 import { defineConfig } from "astro/config";
-import remarkFirstParagraphPlugin from "@myles/astro-remark-first-paragraph-plugin";
+import remarkFirstParagraphPlugin from "@mylesb/astro-remark-first-paragraph-plugin";
 
 export default defineConfig({
   markdown: {
