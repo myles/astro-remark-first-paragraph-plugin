@@ -22,9 +22,6 @@
   "license": "MIT",
   "author": "Myles Braithwaite <myles@myles.garden> (https://myles.garden)",
   "type": "module",
-  "engines": {
-    "node": ">=20"
-  },
   "exports": {
     ".": {
       "types": "./index.d.ts",
@@ -39,7 +36,9 @@
   "scripts": {
     "prettier": "prettier . -c",
     "prettier:write": "prettier . --write",
-    "test": "vitest run",
+    "test": "vitest run --typecheck",
+    "test:coverage": "vitest run --coverage",
+    "test:types": "vitest run --typecheck.only",
     "test:watch": "vitest"
   },
   "dependencies": {
@@ -48,11 +47,16 @@
   },
   "devDependencies": {
     "@mylesb/prettier-config": "^1.1.0",
+    "@vitest/coverage-v8": "^4.1.10",
     "prettier": "^3.9.6",
     "remark-gfm": "^4.0.1",
     "remark-parse": "^11.0.0",
     "semantic-release": "^25.0.9",
+    "typescript": "^7.0.2",
     "vitest": "^4.1.10"
+  },
+  "engines": {
+    "node": ">=20"
   },
   "publishConfig": {
     "access": "public",

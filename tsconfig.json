@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "strict": true,
+    "noEmit": true,
+    // Dependency declaration files assume DOM/Node globals this package
+    // doesn't pull in, and their errors aren't actionable here.
+    "skipLibCheck": true
+  },
+  "include": ["index.d.ts", "test/**/*.test-d.ts"]
+}
