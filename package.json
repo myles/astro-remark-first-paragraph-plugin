@@ -1,0 +1,50 @@
+{
+  "name": "@myles/astro-remark-first-paragraph-plugin",
+  "version": "1.0.0",
+  "description": "Plugin for Remark to get the first paragraph of a markdown file.",
+  "keywords": [
+    "remark",
+    "remark-plugin"
+  ],
+  "homepage": "https://github.com/myles/astro-remark-first-paragraph-plugin#readme",
+  "bugs": {
+    "url": "https://github.com/myles/astro-remark-first-paragraph-plugin/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/myles/astro-remark-first-paragraph-plugin.git"
+  },
+  "license": "MIT",
+  "author": "Myles Braithwaite <myles@myles.garden> (https://myles.garden)",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    }
+  },
+  "types": "./index.d.ts",
+  "files": [
+    "index.js",
+    "index.d.ts"
+  ],
+  "scripts": {
+    "prettier": "prettier . -c",
+    "prettier:write": "prettier . --write"
+  },
+  "dependencies": {
+    "@types/mdast": "^4.0.4",
+    "unified": "^11.0.5",
+    "unist-util-visit": "^5.1.0"
+  },
+  "devDependencies": {
+    "@mylesb/prettier-config": "^1.1.0",
+    "prettier": "^3.9.6"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
