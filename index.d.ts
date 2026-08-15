@@ -6,18 +6,22 @@ import type { Plugin } from "unified";
  */
 export interface FirstParagraphFrontmatter {
   /**
-   * The text content of the first paragraph in the markdown file, with all
-   * inline markup (links, emphasis, code, etc.) flattened to plain text.
+   * The text content of the first top-level paragraph in the markdown file,
+   * with all inline markup (links, emphasis, code, etc.) flattened to plain
+   * text.
+   *
+   * Left unset when the file has no top-level paragraph — for example a file
+   * containing only a heading, or only a list.
    */
-  firstParagraph: string;
+  firstParagraph?: string;
 }
 
 /**
- * Add the text of a markdown file's first paragraph to its frontmatter as
- * `firstParagraph`.
+ * Add the text of a markdown file's first top-level paragraph to its
+ * frontmatter as `firstParagraph`.
  *
  * Requires Astro's `file.data.astro.frontmatter`, so it only works as an Astro
- * remark plugin.
+ * remark plugin. In any other unified pipeline it does nothing.
  *
  * @example
  * ```js

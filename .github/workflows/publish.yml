@@ -30,10 +30,19 @@ jobs:
         with:
           node-version-file: "package.json"
           registry-url: "https://registry.npmjs.org"
+          cache: "npm"
 
       - id: install-dependencies
         name: 📦 Install dependencies
         run: npm ci
+
+      - id: prettier-check
+        name: 💅 Run Prettier check
+        run: npm run prettier
+
+      - id: test
+        name: 🧪 Run tests
+        run: npm test
 
       - id: verify-package
         name: ✅ Verify package
@@ -63,8 +72,12 @@ jobs:
         name: ⚙️ Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: "package.json"
+          # Pinned rather than read from `engines.node`: that range describes
+          # what consumers need, while semantic-release itself requires
+          # ^22.14.0 || >=24.10.0.
+          node-version: 24
           registry-url: "https://registry.npmjs.org"
+          cache: "npm"
 
       - id: install-dependencies
         name: 📦 Install dependencies
@@ -75,4 +88,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npx semantic-release ${{ inputs.dry_run && '--dry-run' || '' }}
+        # `--no-install` so a missing devDependency fails loudly instead of
+        # silently fetching whatever version is current.
+        run: npx --no-install semantic-release ${{ inputs.dry_run && '--dry-run' || '' }}

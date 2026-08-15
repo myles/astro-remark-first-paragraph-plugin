@@ -7,7 +7,9 @@ on:
     branches: [main]
 
 jobs:
-  ci:
+  lint:
+    name: Lint
+
     runs-on: ubuntu-latest
 
     steps:
@@ -20,21 +22,42 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: "package.json"
-          registry-url: "https://registry.npmjs.org"
+          cache: "npm"
 
       - id: install-dependencies
         name: 📦 Install dependencies
         run: npm ci
 
-      - id: cache-dependencies
-        name: 📂 Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-npm-
-
       - id: prettier-check
         name: 💅 Run Prettier check
         run: npm run prettier
+
+  test:
+    name: Test on Node.js ${{ matrix.node-version }}
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [20, 22, 24]
+
+    steps:
+      - id: checkout
+        name: 📥 Checkout code
+        uses: actions/checkout@v7
+
+      - id: setup-node
+        name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+
+      - id: install-dependencies
+        name: 📦 Install dependencies
+        run: npm ci
+
+      - id: test
+        name: 🧪 Run tests
+        run: npm test
