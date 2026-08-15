@@ -1,9 +1,7 @@
-import assert from "node:assert/strict";
-import { describe, it } from "node:test";
-
 import remarkGfm from "remark-gfm";
 import remarkParse from "remark-parse";
 import { unified } from "unified";
+import { describe, expect, it } from "vitest";
 
 import remarkFirstParagraphPlugin from "../index.js";
 
@@ -35,57 +33,50 @@ function firstParagraph(markdown) {
 
 describe("remarkFirstParagraphPlugin", () => {
   it("uses the first paragraph and ignores later ones", () => {
-    assert.equal(
+    expect(
       firstParagraph("The first paragraph.\n\nThe second paragraph.\n"),
-      "The first paragraph.",
-    );
+    ).toBe("The first paragraph.");
   });
 
   it("skips a leading heading", () => {
-    assert.equal(
-      firstParagraph("# Title\n\nThe first paragraph.\n"),
+    expect(firstParagraph("# Title\n\nThe first paragraph.\n")).toBe(
       "The first paragraph.",
     );
   });
 
   describe("flattening inline markup", () => {
     it("strips emphasis, links, and inline code", () => {
-      assert.equal(
+      expect(
         firstParagraph(
           "This is the **first** paragraph, it has a [link](https://example.com) and `code`.\n",
         ),
-        "This is the first paragraph, it has a link and code.",
-      );
+      ).toBe("This is the first paragraph, it has a link and code.");
     });
 
     it("strips raw inline HTML but keeps the text it wraps", () => {
-      assert.equal(
-        firstParagraph("This is <em>emphasised</em> text.\n"),
+      expect(firstParagraph("This is <em>emphasised</em> text.\n")).toBe(
         "This is emphasised text.",
       );
     });
 
     it("turns a hard line break into a single space", () => {
-      assert.equal(firstParagraph("One\\\ntwo.\n"), "One two.");
+      expect(firstParagraph("One\\\ntwo.\n")).toBe("One two.");
     });
 
     it("ignores nodes with no text of their own, such as images", () => {
-      assert.equal(
-        firstParagraph("Before ![alt text](image.png) after.\n"),
+      expect(firstParagraph("Before ![alt text](image.png) after.\n")).toBe(
         "Before  after.",
       );
     });
 
     it("strips a GFM footnote reference", () => {
-      assert.equal(
+      expect(
         firstParagraph("Text with a footnote[^1].\n\n[^1]: The note.\n"),
-        "Text with a footnote.",
-      );
+      ).toBe("Text with a footnote.");
     });
 
     it("strips GFM strikethrough", () => {
-      assert.equal(
-        firstParagraph("This is ~~struck~~ text.\n"),
+      expect(firstParagraph("This is ~~struck~~ text.\n")).toBe(
         "This is struck text.",
       );
     });
@@ -93,34 +84,31 @@ describe("remarkFirstParagraphPlugin", () => {
 
   describe("only considering top-level paragraphs", () => {
     it("skips a paragraph nested in a leading list", () => {
-      assert.equal(
+      expect(
         firstParagraph("- item one\n- item two\n\nThe body paragraph.\n"),
-        "The body paragraph.",
-      );
+      ).toBe("The body paragraph.");
     });
 
     it("skips a paragraph nested in a leading blockquote", () => {
-      assert.equal(
-        firstParagraph("> Quoted intro.\n\nThe body paragraph.\n"),
+      expect(firstParagraph("> Quoted intro.\n\nThe body paragraph.\n")).toBe(
         "The body paragraph.",
       );
     });
 
     it("skips a leading table", () => {
-      assert.equal(
+      expect(
         firstParagraph("| a | b |\n|---|---|\n| 1 | 2 |\n\nThe body.\n"),
-        "The body.",
-      );
+      ).toBe("The body.");
     });
   });
 
   describe("when there is nothing to extract", () => {
     it("leaves frontmatter untouched with no top-level paragraph", () => {
-      assert.deepEqual(process("# Only a heading\n"), {});
+      expect(process("# Only a heading\n")).toStrictEqual({});
     });
 
     it("leaves frontmatter untouched for an empty document", () => {
-      assert.deepEqual(process(""), {});
+      expect(process("")).toStrictEqual({});
     });
 
     it("does not overwrite other frontmatter fields", () => {
@@ -134,7 +122,7 @@ describe("remarkFirstParagraphPlugin", () => {
 
       processor.runSync(processor.parse(file), file);
 
-      assert.deepEqual(file.data.astro.frontmatter, {
+      expect(file.data.astro.frontmatter).toStrictEqual({
         title: "Hello, world",
         firstParagraph: "The first paragraph.",
       });
@@ -143,9 +131,9 @@ describe("remarkFirstParagraphPlugin", () => {
 
   describe("outside Astro", () => {
     it("does nothing when the vfile has no Astro frontmatter", () => {
-      assert.doesNotThrow(() =>
+      expect(() =>
         process("The first paragraph.\n", { astro: false }),
-      );
+      ).not.toThrow();
     });
   });
 });
